@@ -17,6 +17,15 @@ lists_of_approved_people = [
     714247788715573310, # char
 ]
 
+def build_embed(title, description):
+    embed = nc.Embed(
+        title=title,
+        description=description,
+        color=nc.Color(0xdd2ef4),
+    )
+    embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
+    return embed
+
 class Shares_Buttons(nc.ui.View):
     def __init__(self, channel, url):
         super().__init__()
@@ -35,13 +44,10 @@ class Shares_Buttons(nc.ui.View):
         await interaction.response.edit_message(view=self)
         gs.start_approve_process(self.url)
 
-        embed = nc.Embed(
-            title="✅ A submission has been approved!",
-            description=f"""Submission for {self.url} has been approved by {interaction.user.name}.
-This will shortly be shown in the Solar Website.""",
-            color=nc.Color(0xdd2ef4),
-        )
-        embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
+        embed = build_embed(
+            "✅ A submission has been approved!",
+            f"""Submission for {self.url} has been approved by {interaction.user.name}.
+This will shortly be shown in the Solar Website.""")
         await interaction.followup.send(embed=embed)
 
     @nc.ui.button(label="Deny", emoji="❌")
@@ -55,13 +61,10 @@ This will shortly be shown in the Solar Website.""",
             item.disabled = True
         await interaction.response.edit_message(view=self)
 
-        embed = nc.Embed(
-            title="❌ A submission has been denied.",
-            description=f"""Submission for {self.url} has been denied by {interaction.user.name}.
-They can send a reason why it's been denied in the chat soon.""",
-            color=nc.Color(0xdd2ef4),
-        )
-        embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
+        embed = build_embed(
+            "❌ A submission has been denied.",
+            f"""Submission for {self.url} has been denied by {interaction.user.name}.
+They can send a reason why it's been denied in the chat soon.""")
         await interaction.followup.send(embed=embed)
 
 def send_share(url):
@@ -73,16 +76,13 @@ def send_share(url):
     return True
 
 async def post_share(url):
-    embed = nc.Embed(
-        title="A pending new share..",
-        description=f"""———————————————————————————————————
+    embed = build_embed(
+        "A pending new share..",
+        f"""———————————————————————————————————
 {url}
 ———————————————————————————————————
 Please review it, and approve or deny it by clicking the reaction below.
-If you are not a developer, please avoid those buttons.""",
-        color=nc.Color(0xdd2ef4),
-    )
-    embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
+If you are not a developer, please avoid those buttons.""")
 
     channel = client.get_channel(CHANNEL_ID)
     if channel is None:
@@ -99,7 +99,12 @@ def start_bot():
     with open("token.txt", "r") as f:
         token = f.read().strip()
 
-    client = nc.Client()
+    activity = nc.Activity(
+        type=nc.ActivityType.watching,
+        name="pending shares..."
+    )
+
+    client = nc.Client(activity=activity)
 
     @client.event
     async def on_ready():
