@@ -6,16 +6,15 @@ import git_stuff as gs
 import nextcord as nc
 
 CHANNEL_ID = 1536665454108614709
-
-client = None
-bot_loop = None
-_pending = []
-
 lists_of_approved_people = [
     1149685116042485781, # daveberry
     978699497876103199, # videobot
     714247788715573310, # char
 ]
+
+client = None
+bot_loop = None
+_pending = []
 
 def build_embed(title, description):
     embed = nc.Embed(
