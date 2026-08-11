@@ -46,8 +46,8 @@ class Shares_Buttons(nc.ui.View):
 
         embed = build_embed(
             "✅ A submission has been approved!",
-            f"""Submission for {self.url} has been approved by {interaction.user.name}.
-This will shortly be shown in the Solar Website.""")
+            f"""Submission for {self.url} has been approved by <@{interaction.user.id}>.
+This will shortly be shown in the Solar Website. Depending on Github's cache.""")
         await interaction.followup.send(embed=embed)
 
     @nc.ui.button(label="Deny", emoji="❌")
@@ -63,7 +63,7 @@ This will shortly be shown in the Solar Website.""")
 
         embed = build_embed(
             "❌ A submission has been denied.",
-            f"""Submission for {self.url} has been denied by {interaction.user.name}.
+            f"""Submission for {self.url} has been denied by <@{interaction.user.id}>.
 They can send a reason why it's been denied in the chat soon.""")
         await interaction.followup.send(embed=embed)
 
