@@ -34,12 +34,12 @@ Run `venv/bin/python src/main.py` to start the REST API and Bot. (obvious lmao)
 To send requests, use the `POST /send_shares` endpoint with the appropriate JSON payload.
 
 ### Examples
-**Bash**
+**Bash** *(only used for testing.)*
 ```bash
 curl -X POST http://127.0.0.1:8000/send_shares -H 'Content-Type: application/json' -d '{"url":"https://github.com/Team-SolarEngine/test-repo"}'
 ```
 
-**JavaScript**
+**JavaScript** *(only used for production.)*
 ```javascript
 function sendShares(url) {
   fetch('http://127.0.0.1:8000/send_shares', {
