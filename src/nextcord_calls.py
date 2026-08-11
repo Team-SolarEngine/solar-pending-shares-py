@@ -10,6 +10,39 @@ client = None
 bot_loop = None
 _pending = []
 
+lists_of_approved_people = [
+    1149685116042485781, # daveberry
+    978699497876103199, # videobot
+    714247788715573310, # char
+]
+
+class Shares_Buttons(nc.ui.View):
+    def __init__(self, channel):
+        super().__init__()
+        self.channel = channel
+
+    @nc.ui.button(label="Approve", style=nc.ButtonStyle.green, emoji="✅")
+    async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
+        if interaction.user.id not in lists_of_approved_people:
+            print(f"Failed to approve shares by {interaction.user.name}")
+            await interaction.response.send_message("You are not authorized to approve shares.", ephemeral=True)
+            return
+        print(f"Approve button clicked by {interaction.user.name}")
+        for item in self.children:
+            item.disabled = True
+        await interaction.response.edit_message(view=self)
+
+    @nc.ui.button(label="Deny", style=nc.ButtonStyle.red, emoji="❌")
+    async def cancel(self, button: nc.ui.Button, interaction: nc.Interaction):
+        if interaction.user.id not in lists_of_approved_people:
+            print(f"Failed to deny shares by {interaction.user.name}")
+            await interaction.response.send_message("You are not authorized to deny shares.", ephemeral=True)
+            return
+        print(f"Cancel button clicked by {interaction.user.name}")
+        for item in self.children:
+            item.disabled = True
+        await interaction.response.edit_message(view=self)
+
 def send_share(url):
     if bot_loop is None:
         _pending.append(url)
@@ -34,7 +67,9 @@ If you are not a developer, please avoid those buttons.""",
     if channel is None:
         print(f"Couldn't find channel {CHANNEL_ID}")
         return
-    await channel.send(embed=embed)
+
+    view = Shares_Buttons(channel)
+    await channel.send(embed=embed, view=view)
     print(f"Sent to channel {CHANNEL_ID}: {url}")
 
 def start_bot():
