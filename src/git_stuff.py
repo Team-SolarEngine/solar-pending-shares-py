@@ -20,10 +20,6 @@ from datetime import datetime
 
 def start_approve_process(url):
     try:
-        # get current username and email for restore
-        last_username = sp.run(["git", "config", "user.name"], capture_output=True, text=True, check=True)
-        last_email = sp.run(["git", "config", "user.email"], capture_output=True, text=True, check=True)
-
         # clone the test repo and add the url to the featured-repos.txt file
         sp.run(["git", "clone", "https://github.com/Team-SolarEngine/test-repo"], check=True)
 
@@ -44,10 +40,6 @@ def start_approve_process(url):
         sp.run(["git", "add", "featured-repos.txt"], check=True, cwd="test-repo")
         sp.run(["git", "commit", "-m", "add featured repo - " + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " at gmt+8"], check=True, cwd="test-repo")
         sp.run(["git", "push"], check=True, cwd="test-repo")
-
-        # restore the original username and email
-        sp.run(["git", "-C", "test-repo", "config", "user.name", last_username.stdout.strip()], check=True)
-        sp.run(["git", "-C", "test-repo", "config", "user.email", last_email.stdout.strip()], check=True)
 
         # delete the dir
         sp.run(["rm", "-rf", "test-repo"], check=True)
