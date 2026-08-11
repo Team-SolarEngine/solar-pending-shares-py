@@ -23,7 +23,7 @@ class Shares_Buttons(nc.ui.View):
         self.channel = channel
         self.url = url
 
-    @nc.ui.button(label="Approve", style=nc.ButtonStyle.green, emoji="✅")
+    @nc.ui.button(label="Approve", emoji="✅")
     async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
         if interaction.user.id not in lists_of_approved_people:
             print(f"Failed to approve shares by {interaction.user.name}")
@@ -35,7 +35,16 @@ class Shares_Buttons(nc.ui.View):
         await interaction.response.edit_message(view=self)
         gs.start_approve_process(self.url)
 
-    @nc.ui.button(label="Deny", style=nc.ButtonStyle.red, emoji="❌")
+        embed = nc.Embed(
+            title="✅ A submission has been approved!",
+            description=f"""Submission for {self.url} has been approved by {interaction.user.name}.
+This will shortly be shown in the Solar Website.""",
+            color=nc.Color(0xdd2ef4),
+        )
+        embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
+        await interaction.followup.send(embed=embed)
+
+    @nc.ui.button(label="Deny", emoji="❌")
     async def cancel(self, button: nc.ui.Button, interaction: nc.Interaction):
         if interaction.user.id not in lists_of_approved_people:
             print(f"Failed to deny shares by {interaction.user.name}")
@@ -45,6 +54,15 @@ class Shares_Buttons(nc.ui.View):
         for item in self.children:
             item.disabled = True
         await interaction.response.edit_message(view=self)
+
+        embed = nc.Embed(
+            title="❌ A submission has been denied.",
+            description=f"""Submission for {self.url} has been denied by {interaction.user.name}.
+They can send a reason why it's been denied in the chat soon.""",
+            color=nc.Color(0xdd2ef4),
+        )
+        embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
+        await interaction.followup.send(embed=embed)
 
 def send_share(url):
     if bot_loop is None:
