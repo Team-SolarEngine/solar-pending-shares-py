@@ -1,6 +1,7 @@
 import asyncio
 import threading
 from datetime import datetime
+import git_stuff as gs
 
 import nextcord as nc
 
@@ -17,9 +18,10 @@ lists_of_approved_people = [
 ]
 
 class Shares_Buttons(nc.ui.View):
-    def __init__(self, channel):
+    def __init__(self, channel, url):
         super().__init__()
         self.channel = channel
+        self.url = url
 
     @nc.ui.button(label="Approve", style=nc.ButtonStyle.green, emoji="✅")
     async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
@@ -31,6 +33,7 @@ class Shares_Buttons(nc.ui.View):
         for item in self.children:
             item.disabled = True
         await interaction.response.edit_message(view=self)
+        gs.start_approve_process(self.url)
 
     @nc.ui.button(label="Deny", style=nc.ButtonStyle.red, emoji="❌")
     async def cancel(self, button: nc.ui.Button, interaction: nc.Interaction):
@@ -68,7 +71,7 @@ If you are not a developer, please avoid those buttons.""",
         print(f"Couldn't find channel {CHANNEL_ID}")
         return
 
-    view = Shares_Buttons(channel)
+    view = Shares_Buttons(channel, url)
     await channel.send(embed=embed, view=view)
     print(f"Sent to channel {CHANNEL_ID}: {url}")
 
