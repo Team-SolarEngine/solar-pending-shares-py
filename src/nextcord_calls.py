@@ -2,6 +2,7 @@ import asyncio
 import threading
 from datetime import datetime
 import git_stuff as gs
+import time
 
 import nextcord as nc
 from json_read import BOT_TOKEN, CHANNEL_ID, LISTS_OF_APPROVED_PEOPLE
@@ -12,18 +13,18 @@ _pending = []
 
 def build_embed(title, description):
     embed = nc.Embed(
-        title=title,
-        description=description,
+        description=f"""# {title}
+{description}
+> *Posted at <t:{int(time.time())}:S>*""",
         color=nc.Color(0xdd2ef4),
     )
-    embed.set_footer(text=f"Posted at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} as GMT+8")
     return embed
 
 class Shares_Buttons(nc.ui.View):
     def __init__(self, channel, url):
         super().__init__()
         self.channel = channel
-        self.url = url
+        self.url = f"[**{url.replace("https://github.com/", "")}**]({url})"
 
     @nc.ui.button(label="Approve", emoji="✅")
     async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
@@ -70,9 +71,8 @@ def send_share(url):
 
 async def post_share(url):
     embed = build_embed(
-        "A pending new share..",
-        f"""{url}
-
+        "⏳ A pending new share..",
+        f"""[**{url.replace("https://github.com/", "")}**]({url})
 Please review it, and approve or deny it by clicking the button below.
 If you are not a developer, please avoid those buttons.""")
 
