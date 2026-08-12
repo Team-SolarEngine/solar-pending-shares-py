@@ -1,4 +1,5 @@
 import sys
+import os
 
 import fastapi as f
 import uvicorn
@@ -16,6 +17,15 @@ app = f.FastAPI(lifespan=lifespan)
 app.include_router(fr.router)
 
 if __name__ == "__main__":
+    try:
+        open("test-repo/.gitignore", 'r')
+        print("HEY YOU STILL HAD A DIRECTORY")
+
+        import subprocess as sp
+        sp.run(["rm", "-rf", "test-repo"], check=True)
+    except: print("All good to go!")
+    
+    
     with open("token.txt", "r") as f:
         token = f.read().strip()
         if token == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":
