@@ -5,6 +5,7 @@ import fastapi as f
 import uvicorn
 from contextlib import asynccontextmanager
 import subprocess as sp
+from fastapi.middleware.cors import CORSMiddleware
 
 import fastapi_routes as fr
 import nextcord_calls as nxc
@@ -16,6 +17,12 @@ async def lifespan(app):
 
 app = f.FastAPI(lifespan=lifespan)
 app.include_router(fr.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     with open("token.txt", "r") as f:
