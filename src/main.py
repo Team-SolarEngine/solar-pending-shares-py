@@ -4,6 +4,7 @@ import os
 import fastapi as f
 import uvicorn
 from contextlib import asynccontextmanager
+import subprocess as sp
 
 import fastapi_routes as fr
 import nextcord_calls as nxc
@@ -26,16 +27,8 @@ if __name__ == "__main__":
             print("token.txt is empty or not set (how tf)")
             sys.exit(1)
         else:
-
-            try:
-                file = open("test-repo/test-text.txt", 'w') # this WILL trip it.
-                file.write("FAILURE")
-                file.close()
-                print("HEY YOU STILL HAD A DIRECTORY")
-
-                import subprocess as sp
-                sp.run(["rm", "-rf", "test-repo"], check=True)
-            except Exception as e: print("All good to go! `" + string(e) + "`")
+            if os.path.exists("test-repo"):
+                sp.run(["rm", "-rf", "test-repo"])
 
             print("valid. go ahead, cheif!")
             print(''.join('*' if char != '.' else '.' for char in token))
