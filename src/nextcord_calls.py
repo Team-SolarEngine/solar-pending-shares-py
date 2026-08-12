@@ -25,7 +25,7 @@ class Shares_Buttons(nc.ui.View):
         super().__init__()
         self.channel = channel
         if not url.__contains__("https://"): url = "https://" + url
-        self.url = f"[**{url.replace("https://github.com/", "")}**]({url})"
+        self.url = f"**[{url.replace("https://github.com/", "")}]({url})**"
 
     @nc.ui.button(label="Approve", emoji="✅")
     async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
@@ -71,9 +71,10 @@ def send_share(url):
     return True
 
 async def post_share(url):
+    if not url.__contains__("https://"): url = "https://" + url
     embed = build_embed(
         "⏳ A pending new share..",
-        f"""[**{url.replace("https://github.com/", "")}**]({url})
+        f"""**[{url.replace("https://github.com/", "")}]({url})**
 Please review it, and approve or deny it by clicking the button below.
 If you are not a developer, please avoid those buttons.""")
 
