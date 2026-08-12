@@ -4,13 +4,12 @@ from datetime import datetime
 import git_stuff as gs
 
 import nextcord as nc
+from json_read import read_config
 
-CHANNEL_ID = 1536665454108614709
-lists_of_approved_people = [
-    1149685116042485781, # daveberry
-    978699497876103199, # videobot
-    714247788715573310, # char
-]
+config = read_config()
+TOKEN = config["bot_token"]
+CHANNEL_ID = int(config["channel_id"])
+LISTS_OF_APPROVED_PEOPLE = [int(id) for id in config["lists_of_approved_people"]]
 
 client = None
 bot_loop = None
@@ -33,7 +32,7 @@ class Shares_Buttons(nc.ui.View):
 
     @nc.ui.button(label="Approve", emoji="✅")
     async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
-        if interaction.user.id not in lists_of_approved_people:
+        if interaction.user.id not in LISTS_OF_APPROVED_PEOPLE:
             print(f"Failed to approve shares by {interaction.user.name}")
             await interaction.response.send_message("You are not authorized to approve shares.", ephemeral=True)
             return
@@ -51,7 +50,7 @@ This will shortly be shown in the Solar Website. Depending on Github's cache."""
 
     @nc.ui.button(label="Deny", emoji="❌")
     async def cancel(self, button: nc.ui.Button, interaction: nc.Interaction):
-        if interaction.user.id not in lists_of_approved_people:
+        if interaction.user.id not in LISTS_OF_APPROVED_PEOPLE:
             print(f"Failed to deny shares by {interaction.user.name}")
             await interaction.response.send_message("You are not authorized to deny shares.", ephemeral=True)
             return
@@ -94,9 +93,6 @@ If you are not a developer, please avoid those buttons.""")
 def start_bot():
     global client, bot_loop
 
-    with open("token.txt", "r") as f:
-        token = f.read().strip()
-
     activity = nc.Activity(
         type=nc.ActivityType.watching,
         name="pending shares..."
@@ -113,7 +109,7 @@ def start_bot():
             await post_share(url)
         print(f"Logged in as {client.user}")
 
-    threading.Thread(target=lambda: asyncio.run(client.start(token)), daemon=True).start()
+    threading.Thread(target=lambda: asyncio.run(client.start(TOKEN)), daemon=True).start()
 
 if __name__ == "__main__":
     start_bot()

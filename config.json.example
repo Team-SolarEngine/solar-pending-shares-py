@@ -1,0 +1,8 @@
+{
+  "bot_token": "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER",
+  "channel_id": "INPUT_DISCORD_CHANNEL_ID_FOR_YOUR_SERVER",
+  "lists_of_approved_people": [
+    "INPUT_DISCORD_USER_ID",
+    "ADD_MORE_USERS_AS_NEEDED"
+  ]
+}

@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import fastapi_routes as fr
 import nextcord_calls as nxc
+from json_read import read_config
 
 @asynccontextmanager
 async def lifespan(app):
@@ -25,18 +26,31 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
-    with open("token.txt", "r") as f:
-        token = f.read().strip()
-        if token == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":
-            print("rethink your life choices. (you forgot to put a discord bot token)")
-            sys.exit(1)
-        elif not token:
-            print("token.txt is empty or not set (how tf)")
-            sys.exit(1)
-        else:
-            if os.path.exists("test-repo"):
-                sp.run(["rm", "-rf", "test-repo"])
+    # with open("token.txt", "r") as f:
+    #     token = f.read().strip()
+    #     if token == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":
+    #         print("rethink your life choices. (you forgot to put a discord bot token)")
+    #         sys.exit(1)
+    #     elif not token:
+    #         print("token.txt is empty or not set (how tf)")
+    #         sys.exit(1)
+    #     else:
+    #         if os.path.exists("test-repo"):
+    #             sp.run(["rm", "-rf", "test-repo"])
 
-            print("valid. go ahead, cheif!")
-            print(''.join('*' if char != '.' else '.' for char in token))
+    #         print("valid. go ahead, cheif!")
+    #         print(''.join('*' if char != '.' else '.' for char in token))
+
+    if os.path.exists("test-repo"):
+        sp.run(["rm", "-rf", "test-repo"])
+
+    config = read_config()
+    if config["bot_token"] == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":
+        print("rethink your life choices. (you forgot to put a discord bot token)")
+        sys.exit(1)
+    token = config["bot_token"]
+
+    print("valid. go ahead, cheif!")
+    print(''.join('*' if char != '.' else '.' for char in token))
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
