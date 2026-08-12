@@ -14,24 +14,20 @@ This just sends a embed for the [shared section in the solar website](https://so
 git clone https://github.com/Team-SolarEngine/solar-pending-shares
 cd solar-pending-shares
 
-# create token.txt beforehand dummy
-echo "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER" > token.txt
-# don't leave this as `INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER` - replace it with your actual token
-# also don't share or commit this file YOU WILL BE PWNED DUMMY!!
-
 # do all python shit ig
 python -m venv venv
 venv/bin/pip install -r requirements.txt
 venv/bin/python src/main.py
 ```
 
-## CHECK THE FILES.
-Inside of [`@src/nextcord_calls.py`](./src/nextcord_calls.py), please update `lists_of_approved_people` and `CHANNEL_ID` to your own values. Make sure you have developer mode enabled in Discord to get the channel ID.
+> [!IMPORTANT]
+> Set up [@config.json.example](./config.json.example) beforehand. Rename it to `config.json` and fill in the values. Don't rename the file, duplicate it, and rename it to `config.json`.
+
+> [!WARNING]
+> Most importantly, DON'T FUCKING SHARE YOUR `config.json` FILE. You will be PWNED.
 
 ## Usage
-Run `venv/bin/python src/main.py` to start the REST API and Bot. (obvious lmao)
-
-To send requests, use the `POST /send_shares` endpoint with the appropriate JSON payload.
+Run `venv/bin/python src/main.py` to start the REST API and Bot (obvious lmao). To send requests, use the `POST /send_shares` endpoint with the appropriate JSON payload.
 
 ### Examples
 **Bash** *(only used for testing.)*
