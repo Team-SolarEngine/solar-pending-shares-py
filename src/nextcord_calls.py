@@ -24,7 +24,7 @@ class Shares_Buttons(nc.ui.View):
     def __init__(self, channel, url):
         super().__init__()
         self.channel = channel
-        if not url.__contains__("https://"): url += "https://"
+        if not url.__contains__("https://"): url = "https://" + url
         self.url = f"[**{url.replace("https://github.com/", "")}**]({url})"
 
     @nc.ui.button(label="Approve", emoji="✅")
