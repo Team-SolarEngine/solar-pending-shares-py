@@ -4,12 +4,7 @@ from datetime import datetime
 import git_stuff as gs
 
 import nextcord as nc
-from json_read import read_config
-
-config = read_config()
-TOKEN = config["bot_token"]
-CHANNEL_ID = int(config["channel_id"])
-LISTS_OF_APPROVED_PEOPLE = [int(id) for id in config["lists_of_approved_people"]]
+from json_read import BOT_TOKEN, CHANNEL_ID, LISTS_OF_APPROVED_PEOPLE
 
 client = None
 bot_loop = None
@@ -109,7 +104,7 @@ def start_bot():
             await post_share(url)
         print(f"Logged in as {client.user}")
 
-    threading.Thread(target=lambda: asyncio.run(client.start(TOKEN)), daemon=True).start()
+    threading.Thread(target=lambda: asyncio.run(client.start(BOT_TOKEN)), daemon=True).start()
 
 if __name__ == "__main__":
     start_bot()

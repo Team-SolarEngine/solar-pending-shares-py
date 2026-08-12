@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import fastapi_routes as fr
 import nextcord_calls as nxc
-from json_read import read_config
+from json_read import BOT_TOKEN
 
 @asynccontextmanager
 async def lifespan(app):
@@ -44,13 +44,11 @@ if __name__ == "__main__":
     if os.path.exists("test-repo"):
         sp.run(["rm", "-rf", "test-repo"])
 
-    config = read_config()
-    if config["bot_token"] == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":
+    if BOT_TOKEN == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":
         print("rethink your life choices. (you forgot to put a discord bot token)")
         sys.exit(1)
-    token = config["bot_token"]
 
     print("valid. go ahead, cheif!")
-    print(''.join('*' if char != '.' else '.' for char in token))
+    print(''.join('*' if char != '.' else '.' for char in BOT_TOKEN))
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
