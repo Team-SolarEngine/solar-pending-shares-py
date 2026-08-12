@@ -24,7 +24,6 @@ class Shares_Buttons(nc.ui.View):
     def __init__(self, channel, url):
         super().__init__()
         self.channel = channel
-        if not url.__contains__("https://"): url = "https://" + url
         self.url = f"**[{url.replace("https://github.com/", "")}]({url})**"
 
     @nc.ui.button(label="Approve", emoji="✅")
@@ -71,7 +70,6 @@ def send_share(url):
     return True
 
 async def post_share(url):
-    if not url.__contains__("https://"): url = "https://" + url
     embed = build_embed(
         "⏳ A pending new share..",
         f"""**[{url.replace("https://github.com/", "")}]({url})**
