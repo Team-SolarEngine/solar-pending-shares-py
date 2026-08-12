@@ -77,10 +77,9 @@ def send_share(url):
 async def post_share(url):
     embed = build_embed(
         "A pending new share..",
-        f"""———————————————————————————————————
-{url}
-———————————————————————————————————
-Please review it, and approve or deny it by clicking the reaction below.
+        f"""{url}
+
+Please review it, and approve or deny it by clicking the button below.
 If you are not a developer, please avoid those buttons.""")
 
     channel = client.get_channel(CHANNEL_ID)
