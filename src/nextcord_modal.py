@@ -33,7 +33,7 @@ class Reject_Modal(nc.ui.Modal):
         embed = build_embed(
             "❌ A submission has been denied.",
             f"""Submission for {self.url} has been denied by <@{interaction.user.id}>.
-**Given reason**; {self.reason.value}""")
+**Given reason**; {self.reason.value if self.reason.value else "*No reason given...*"}""")
         await interaction.followup.send(embed=embed)
 
         print(f"Cancel button clicked by {interaction.user.name}.\n  Reason; {self.reason.value}")
