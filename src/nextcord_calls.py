@@ -6,6 +6,7 @@ import time
 
 import nextcord as nc
 from json_read import BOT_TOKEN, CHANNEL_ID, LISTS_OF_APPROVED_PEOPLE
+from nextcord_modal import Reject_Modal
 
 client = None
 bot_loop = None
@@ -50,16 +51,24 @@ This will shortly be shown in the Solar Website. Depending on Github's cache."""
             print(f"Failed to deny shares by {interaction.user.name}")
             await interaction.response.send_message("You are not authorized to deny shares.", ephemeral=True)
             return
-        print(f"Cancel button clicked by {interaction.user.name}")
         for item in self.children:
             item.disabled = True
-        await interaction.response.edit_message(view=self)
 
-        embed = build_embed(
-            "❌ A submission has been denied.",
-            f"""Submission for {self.url} has been denied by <@{interaction.user.id}>.
-They can send a reason why it's been denied in the chat soon.""")
-        await interaction.followup.send(embed=embed)
+        # old STINKY one...
+#         embed = build_embed(
+#             "❌ A submission has been denied.",
+#             f"""Submission for {self.url} has been denied by <@{interaction.user.id}>.
+# They can submit a reason with the button below.""")
+#         await interaction.followup.send(embed=embed)
+
+        # new one lol!
+        modal = Reject_Modal(
+            self.channel,
+            self.url,
+            self,
+            interaction.message,
+        )
+        await interaction.response.send_modal(modal)
 
 def send_share(url):
     if bot_loop is None:
