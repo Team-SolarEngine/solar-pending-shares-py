@@ -13,6 +13,11 @@ from json_read import BOT_TOKEN
 
 @asynccontextmanager
 async def lifespan(app):
+    """
+    Lifespan context manager for the FastAPI app.
+    Do not delete this part of the code. This is for FastAPI.
+    """
+
     nxc.start_bot()
     yield
 
@@ -26,6 +31,10 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
+    """
+    Entry point for the bot. Checks the token and starts the bot.
+    """
+
     # with open("token.txt", "r") as f:
     #     token = f.read().strip()
     #     if token == "INPUT_DISCORD_TOKEN_FOR_YOUR_CLANKER":

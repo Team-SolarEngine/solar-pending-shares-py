@@ -2,6 +2,17 @@ import nextcord as nc
 import time
 
 def build_embed(title, description):
+    """
+    Builds an embed with the given title and description.
+
+    Arguments:
+        title (str): The title of the embed.
+        description (str): The description of the embed.
+
+    Returns:
+        nc.Embed: The built embed.
+    """
+
     embed = nc.Embed(
         description=f"""# {title}
 {description}
@@ -11,6 +22,19 @@ def build_embed(title, description):
     return embed
 
 class Reject_Modal(nc.ui.Modal):
+    """
+    Modal for rejecting a submission.
+
+    Arguments:
+        channel (nc.TextChannel): The channel to send the rejection message to.
+        url (str): The URL of the submission.
+        view (nc.ui.View): The view associated with the submission.
+        message (nc.Message): The message associated with the submission.
+
+    Returns:
+        None.
+    """
+
     def __init__(self, channel, url, view, message):
         super().__init__(title="Reject Submission")
         self.channel = channel

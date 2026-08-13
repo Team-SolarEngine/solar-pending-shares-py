@@ -1,22 +1,27 @@
 import subprocess as sp
 from datetime import datetime
 
-# if you're too lazy to read the code, here's a quick overview of what it does:
-# note; I DID add comments if you wanted to read them, not that hard to understand.
+"""
+Process for approval for a pending share. Step-by-step on how it works.
 
-# git clone https://github.com/Team-SolarEngine/test-repo
-#            |
-#            v
-# writes featured-repos.txt with the url given
-#            |
-#            v
-# commits it
-#            |
-#            v
-# delete the cloned folder
-#            |
-#            v
-# repeat
+git clone https://github.com/Team-SolarEngine/test-repo
+           |
+           v
+writes featured-repos.txt with the url given
+           |
+           v
+commits it
+           |
+           v
+delete the cloned folder
+           |
+           v
+repeat
+
+Returns:
+    If all good, then "All good!"
+    : Else, the error message.
+"""
 
 def start_approve_process(url):
     try:

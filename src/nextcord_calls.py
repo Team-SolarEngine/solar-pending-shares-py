@@ -13,6 +13,17 @@ bot_loop = None
 _pending = []
 
 def build_embed(title, description):
+    """
+    Builds an embed with the given title and description.
+
+    Arguments:
+        title (str): The title of the embed.
+        description (str): The description of the embed.
+
+    Returns:
+        nc.Embed: The built embed.
+    """
+
     embed = nc.Embed(
         description=f"""# {title}
 {description}
@@ -22,6 +33,14 @@ def build_embed(title, description):
     return embed
 
 class Shares_Buttons(nc.ui.View):
+    """
+    View for the buttons associated with a submission.
+
+    Attributes:
+        channel (nc.TextChannel): The channel to send the rejection message to.
+        url (str): The URL of the submission.
+    """
+
     def __init__(self, channel, url):
         super().__init__()
         self.channel = channel
@@ -29,6 +48,16 @@ class Shares_Buttons(nc.ui.View):
 
     @nc.ui.button(label="Approve", emoji="✅")
     async def approve(self, button: nc.ui.Button, interaction: nc.Interaction):
+        """
+        Approves the submission and sends a message to the channel.
+
+        Arguments:
+            None
+
+        Returns:
+            None
+        """
+
         if interaction.user.id not in LISTS_OF_APPROVED_PEOPLE:
             print(f"Failed to approve shares by {interaction.user.name}")
             await interaction.response.send_message("You are not authorized to approve shares.", ephemeral=True)
@@ -47,6 +76,16 @@ This will shortly be shown in the Solar Website. Depending on Github's cache."""
 
     @nc.ui.button(label="Deny", emoji="❌")
     async def cancel(self, button: nc.ui.Button, interaction: nc.Interaction):
+        """
+        Denies the submission and sends a message to the channel.
+
+        Arguments:
+            None
+
+        Returns:
+            None
+        """
+
         if interaction.user.id not in LISTS_OF_APPROVED_PEOPLE:
             print(f"Failed to deny shares by {interaction.user.name}")
             await interaction.response.send_message("You are not authorized to deny shares.", ephemeral=True)
@@ -71,6 +110,16 @@ This will shortly be shown in the Solar Website. Depending on Github's cache."""
         await interaction.response.send_modal(modal)
 
 def send_share(url):
+    """
+    Sends a share to the bot, queuing it if the bot is not ready yet.
+
+    Arguments:
+        url (str): The URL of the share to send.
+
+    Returns:
+        bool: True if the share was sent successfully, False if it was queued.
+    """
+
     if bot_loop is None:
         _pending.append(url)
         print("Bot not ready yet; queued command")
@@ -79,6 +128,16 @@ def send_share(url):
     return True
 
 async def post_share(url):
+    """
+    Posts a share to the channel, with a view for approval/denial.
+
+    Arguments:
+        url (str): The URL of the share to post.
+
+    Returns:
+        None
+    """
+
     embed = build_embed(
         "⏳ A pending new share..",
         f"""**[{url.replace("https://github.com/", "")}]({url})**
@@ -95,6 +154,16 @@ If you are not a developer, please avoid those buttons.""")
     print(f"Sent to channel {CHANNEL_ID}: {url}")
 
 def start_bot():
+    """
+    Starts the bot, connecting to Discord and handling pending shares.
+
+    Arguments:
+        None
+
+    Returns:
+        None
+    """
+
     global client, bot_loop
 
     activity = nc.Activity(
